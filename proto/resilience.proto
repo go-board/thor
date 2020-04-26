@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "thor_proto";
+
+extend google.protobuf.MessageOptions {
+  optional bool is_idempotent = 60000;
+  optional int32 max_retries = 60001;
+}
+
+enum JsonTagMode {
+  CamelCase = 0;
+  SnakeCase = 1;
+}
+
+extend google.protobuf.FieldOptions {
+  optional string json_tag = 61000;
+  optional JsonTagMode json_tag_mode = 61001;
+  optional string default_value = 61002;
+}
