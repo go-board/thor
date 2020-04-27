@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/go-board/thor/pkg/logger"
+	"github.com/go-board/thor/pkg/trace"
 )
 
 // Options is the thor application global configuration.
@@ -15,6 +16,7 @@ type Options struct {
 	Metadata       map[string]string `yaml:"metadata"`
 	Listeners      []ListenerOption  `yaml:"listeners"`
 	Logger         LoggerOption      `yaml:"logger"`
+	Trace          TraceOption       `yaml:"trace"`
 	Registry       RegistryOption    `yaml:"registry"`
 	Resilience     ResilienceOption  `yaml:"resilience"`
 }
@@ -82,6 +84,11 @@ type LoggerOption struct {
 	DefaultLevel string `yaml:"log_default_level"`
 }
 
+type TraceOption struct {
+	TraceSampleType  string  `yaml:"trace_sample_type"`
+	TraceSampleParam float64 `yaml:"trace_sample_param"`
+}
+
 type Option func(o *Options)
 
 var globalOptions = new(Options)
@@ -93,4 +100,5 @@ func Initialize(options ...Option) {
 	}
 
 	logger.Initialize(globalOptions.Logger.Dir, globalOptions.Namespace, globalOptions.ServiceName, globalOptions.ServiceID)
+	trace.Initialize(globalOptions.ServiceName, globalOptions.Trace.TraceSampleType, globalOptions.Trace.TraceSampleParam)
 }
