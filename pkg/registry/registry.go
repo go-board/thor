@@ -15,9 +15,17 @@ type Service struct {
 
 type WatchResult struct {
 	Services []*Service
-	Action   string
+	Action   Action
 	Error    error
 }
+
+type Action int
+
+const (
+	ActionAdd Action = iota
+	ActionUpdate
+	ActionRemove
+)
 
 type Registry interface {
 	GetService(ctx context.Context, name string) ([]*Service, error)
